@@ -7,14 +7,26 @@
 
 A high-performance, pure Swift Markdown parser with CommonMark compatibility and useful extensions.
 
+## 🎉 What's New in v2.0
+
+- **Native SwiftUI Support**: New `MarkdownView` and `StreamingMarkdownView` components
+- **Text Extension**: Use `Text(markdown:)` for inline markdown rendering
+- **Pre-built Themes**: GitHub, Documentation, and Chat themes included
+- **Improved Spacing**: Better default paragraph and line spacing
+- **Streaming Optimization**: Efficient handling of real-time text updates
+- **SwiftUI Integration Guide**: Complete documentation for SwiftUI developers
+
+See the [SwiftUI Integration Guide](Documentation/SwiftUIIntegration.md) for details.
+
 ## Features
 
 ✅ **CommonMark Compatible** - Follows the CommonMark specification  
 ✅ **Pure Swift** - No external dependencies, works on all Swift platforms  
 ✅ **Fast** - Optimized for performance with linear time complexity  
 ✅ **Safe** - Memory-safe, thread-safe, and thoroughly tested  
-✅ **Extensible** - Clean architecture for adding custom elements  
-✅ **Rich Rendering** - Built-in NSAttributedString rendering for Apple platforms  
+✅ **SwiftUI Native** - First-class SwiftUI support with MarkdownView  
+✅ **Streaming Support** - Optimized for real-time text updates  
+✅ **Rich Rendering** - Built-in NSAttributedString with themes  
 ✅ **Well-Documented** - Comprehensive API documentation with examples  
 
 ### Supported Markdown Elements
@@ -76,6 +88,28 @@ Then add it to your target dependencies:
 
 ## Quick Start
 
+### SwiftUI (New!)
+
+```swift
+import SwiftUI
+import syndrome
+
+struct ContentView: View {
+    var body: some View {
+        // Simple markdown rendering
+        MarkdownView("# Hello\nThis is **bold** text")
+        
+        // Streaming support for chat apps
+        StreamingMarkdownView(content: $messageContent)
+        
+        // Inline markdown in Text views
+        Text(markdown: "**Bold** and *italic* text")
+    }
+}
+```
+
+### UIKit/AppKit
+
 ```swift
 import syndrome
 
@@ -92,13 +126,13 @@ let markdown = """
 // Parse the markdown
 let document = MarkdownParser.parse(markdown)
 
-// Option 1: Render to NSAttributedString (iOS/macOS only)
+// Render to NSAttributedString with themes
 #if canImport(UIKit) || canImport(AppKit)
-let attributedString = document.attributedString()
+let attributedString = document.attributedString(options: .github)
 // Use in UITextView, NSTextView, UILabel, etc.
 #endif
 
-// Option 2: Access the parsed structure directly
+// Or access the parsed structure directly
 for block in document.blocks {
     switch block {
     case .heading(let level, let content):

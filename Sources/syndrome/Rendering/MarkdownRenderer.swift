@@ -50,6 +50,9 @@ public struct MarkdownRenderingOptions {
     /// Spacing between paragraphs
     public var paragraphSpacing: CGFloat
     
+    /// Line spacing within paragraphs
+    public var lineSpacing: CGFloat
+    
     /// Creates default rendering options.
     public static var `default`: MarkdownRenderingOptions {
         #if canImport(AppKit)
@@ -62,8 +65,9 @@ public struct MarkdownRenderingOptions {
             codeBlockBackgroundColor: .textBackgroundColor.withAlphaComponent(0.05),
             blockquoteColor: .secondaryLabelColor,
             monospaceFontName: "SF Mono",
-            listIndentation: 20.0,
-            paragraphSpacing: 8.0
+            listIndentation: 28.0,
+            paragraphSpacing: 14.0,
+            lineSpacing: 3.0
         )
         #else
         return MarkdownRenderingOptions(
@@ -75,8 +79,108 @@ public struct MarkdownRenderingOptions {
             codeBlockBackgroundColor: .tertiarySystemBackground,
             blockquoteColor: .secondaryLabel,
             monospaceFontName: "SF Mono",
-            listIndentation: 20.0,
-            paragraphSpacing: 8.0
+            listIndentation: 28.0,
+            paragraphSpacing: 14.0,
+            lineSpacing: 3.0
+        )
+        #endif
+    }
+    
+    /// GitHub-style rendering theme.
+    public static var github: MarkdownRenderingOptions {
+        #if canImport(AppKit)
+        return MarkdownRenderingOptions(
+            baseFont: .systemFont(ofSize: 16),
+            textColor: .textColor,
+            linkColor: NSColor(red: 0.03, green: 0.46, blue: 0.87, alpha: 1.0),
+            codeColor: .textColor,
+            codeBackgroundColor: NSColor(white: 0.96, alpha: 1.0),
+            codeBlockBackgroundColor: NSColor(white: 0.97, alpha: 1.0),
+            blockquoteColor: .secondaryLabelColor,
+            monospaceFontName: "SF Mono",
+            listIndentation: 32.0,
+            paragraphSpacing: 16.0,
+            lineSpacing: 4.0
+        )
+        #else
+        return MarkdownRenderingOptions(
+            baseFont: .systemFont(ofSize: 16),
+            textColor: .label,
+            linkColor: UIColor(red: 0.03, green: 0.46, blue: 0.87, alpha: 1.0),
+            codeColor: .label,
+            codeBackgroundColor: UIColor(white: 0.96, alpha: 1.0),
+            codeBlockBackgroundColor: UIColor(white: 0.97, alpha: 1.0),
+            blockquoteColor: .secondaryLabel,
+            monospaceFontName: "SF Mono",
+            listIndentation: 32.0,
+            paragraphSpacing: 16.0,
+            lineSpacing: 4.0
+        )
+        #endif
+    }
+    
+    /// Documentation-style rendering theme.
+    public static var documentation: MarkdownRenderingOptions {
+        #if canImport(AppKit)
+        return MarkdownRenderingOptions(
+            baseFont: .systemFont(ofSize: 15),
+            textColor: .textColor,
+            linkColor: .linkColor,
+            codeColor: NSColor(red: 0.68, green: 0.18, blue: 0.89, alpha: 1.0),
+            codeBackgroundColor: NSColor(white: 0.95, alpha: 1.0),
+            codeBlockBackgroundColor: NSColor(white: 0.98, alpha: 1.0),
+            blockquoteColor: NSColor(white: 0.4, alpha: 1.0),
+            monospaceFontName: "SF Mono",
+            listIndentation: 24.0,
+            paragraphSpacing: 12.0,
+            lineSpacing: 2.0
+        )
+        #else
+        return MarkdownRenderingOptions(
+            baseFont: .systemFont(ofSize: 15),
+            textColor: .label,
+            linkColor: .link,
+            codeColor: UIColor(red: 0.68, green: 0.18, blue: 0.89, alpha: 1.0),
+            codeBackgroundColor: .secondarySystemBackground,
+            codeBlockBackgroundColor: .tertiarySystemBackground,
+            blockquoteColor: .secondaryLabel,
+            monospaceFontName: "SF Mono",
+            listIndentation: 24.0,
+            paragraphSpacing: 12.0,
+            lineSpacing: 2.0
+        )
+        #endif
+    }
+    
+    /// Chat application rendering theme.
+    public static var chat: MarkdownRenderingOptions {
+        #if canImport(AppKit)
+        return MarkdownRenderingOptions(
+            baseFont: .systemFont(ofSize: NSFont.systemFontSize),
+            textColor: .textColor,
+            linkColor: .linkColor,
+            codeColor: .textColor,
+            codeBackgroundColor: NSColor(white: 0.92, alpha: 1.0),
+            codeBlockBackgroundColor: NSColor(white: 0.95, alpha: 1.0),
+            blockquoteColor: .secondaryLabelColor,
+            monospaceFontName: "SF Mono",
+            listIndentation: 28.0,
+            paragraphSpacing: 14.0,
+            lineSpacing: 3.0
+        )
+        #else
+        return MarkdownRenderingOptions(
+            baseFont: .systemFont(ofSize: UIFont.systemFontSize),
+            textColor: .label,
+            linkColor: .link,
+            codeColor: .label,
+            codeBackgroundColor: .quaternarySystemFill,
+            codeBlockBackgroundColor: .tertiarySystemBackground,
+            blockquoteColor: .secondaryLabel,
+            monospaceFontName: "SF Mono",
+            listIndentation: 28.0,
+            paragraphSpacing: 14.0,
+            lineSpacing: 3.0
         )
         #endif
     }
@@ -91,8 +195,9 @@ public struct MarkdownRenderingOptions {
         codeBlockBackgroundColor: PlatformColor,
         blockquoteColor: PlatformColor,
         monospaceFontName: String? = nil,
-        listIndentation: CGFloat = 20.0,
-        paragraphSpacing: CGFloat = 8.0
+        listIndentation: CGFloat = 28.0,
+        paragraphSpacing: CGFloat = 14.0,
+        lineSpacing: CGFloat = 3.0
     ) {
         self.baseFont = baseFont
         self.textColor = textColor
@@ -104,6 +209,7 @@ public struct MarkdownRenderingOptions {
         self.monospaceFontName = monospaceFontName
         self.listIndentation = listIndentation
         self.paragraphSpacing = paragraphSpacing
+        self.lineSpacing = lineSpacing
     }
 }
 
@@ -376,9 +482,10 @@ public struct MarkdownRenderer {
         }
     }
     
-    private func createParagraphStyle(spacing: CGFloat? = nil) -> NSParagraphStyle {
+    private func createParagraphStyle(spacing: CGFloat? = nil, lineSpacing: CGFloat? = nil) -> NSParagraphStyle {
         let style = NSMutableParagraphStyle()
         style.paragraphSpacing = spacing ?? options.paragraphSpacing
+        style.lineSpacing = lineSpacing ?? options.lineSpacing
         return style
     }
     

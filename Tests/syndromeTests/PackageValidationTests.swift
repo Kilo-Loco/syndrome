@@ -83,11 +83,15 @@ struct PackageValidationTests {
         let examplesPath = packagePath.appendingPathComponent("Examples")
         #expect(FileManager.default.fileExists(atPath: examplesPath.path))
         
-        let basicUsagePath = examplesPath.appendingPathComponent("BasicUsage")
-        #expect(FileManager.default.fileExists(atPath: basicUsagePath.path))
+        // Check for actual example files
+        let renderingExamplePath = examplesPath.appendingPathComponent("RenderingExample.swift")
+        #expect(FileManager.default.fileExists(atPath: renderingExamplePath.path))
         
-        let advancedFeaturesPath = examplesPath.appendingPathComponent("AdvancedFeatures")
-        #expect(FileManager.default.fileExists(atPath: advancedFeaturesPath.path))
+        let swiftUIExamplePath = examplesPath.appendingPathComponent("SwiftUIExample.swift")
+        #expect(FileManager.default.fileExists(atPath: swiftUIExamplePath.path))
+        
+        let chatAppExamplePath = examplesPath.appendingPathComponent("ChatAppExample.swift")
+        #expect(FileManager.default.fileExists(atPath: chatAppExamplePath.path))
     }
     
     @Test("Public API is exposed")
