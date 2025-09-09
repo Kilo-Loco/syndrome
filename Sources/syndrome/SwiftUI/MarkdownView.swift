@@ -44,13 +44,40 @@ public struct MarkdownView: View {
         let document = MarkdownParser.parse(content)
         let nsAttributedString = document.attributedString(options: options)
         
-        // Convert NSAttributedString to AttributedString
+        // Convert NSAttributedString to AttributedString with proper attribute scopes
+        #if canImport(UIKit)
+        do {
+            attributedString = try AttributedString(nsAttributedString, including: \.uiKit)
+        } catch {
+            // Try foundation scope as fallback
+            do {
+                attributedString = try AttributedString(nsAttributedString, including: \.foundation)
+            } catch {
+                // Last resort: plain text from parsed document
+                attributedString = AttributedString(nsAttributedString.string)
+            }
+        }
+        #elseif canImport(AppKit)
+        do {
+            attributedString = try AttributedString(nsAttributedString, including: \.appKit)
+        } catch {
+            // Try foundation scope as fallback
+            do {
+                attributedString = try AttributedString(nsAttributedString, including: \.foundation)
+            } catch {
+                // Last resort: plain text from parsed document
+                attributedString = AttributedString(nsAttributedString.string)
+            }
+        }
+        #else
+        // For other platforms, use foundation scope
         do {
             attributedString = try AttributedString(nsAttributedString, including: \.foundation)
         } catch {
-            // Fallback to plain text
-            attributedString = AttributedString(content)
+            // Last resort: plain text from parsed document
+            attributedString = AttributedString(nsAttributedString.string)
         }
+        #endif
     }
 }
 
@@ -100,14 +127,45 @@ extension Text {
         let document = MarkdownParser.parse(markdown)
         let nsAttributedString = document.attributedString(options: options)
         
-        // Convert NSAttributedString to AttributedString
+        // Convert NSAttributedString to AttributedString with proper attribute scopes
+        #if canImport(UIKit)
+        do {
+            let converted = try AttributedString(nsAttributedString, including: \.uiKit)
+            self.init(converted)
+        } catch {
+            // Try foundation scope as fallback
+            do {
+                let converted = try AttributedString(nsAttributedString, including: \.foundation)
+                self.init(converted)
+            } catch {
+                // Last resort: plain text from parsed document
+                self.init(nsAttributedString.string)
+            }
+        }
+        #elseif canImport(AppKit)
+        do {
+            let converted = try AttributedString(nsAttributedString, including: \.appKit)
+            self.init(converted)
+        } catch {
+            // Try foundation scope as fallback
+            do {
+                let converted = try AttributedString(nsAttributedString, including: \.foundation)
+                self.init(converted)
+            } catch {
+                // Last resort: plain text from parsed document
+                self.init(nsAttributedString.string)
+            }
+        }
+        #else
+        // For other platforms, use foundation scope
         do {
             let converted = try AttributedString(nsAttributedString, including: \.foundation)
             self.init(converted)
         } catch {
-            // Fallback to plain text
-            self.init(markdown)
+            // Last resort: plain text from parsed document
+            self.init(nsAttributedString.string)
         }
+        #endif
     }
 }
 
@@ -144,13 +202,40 @@ public struct StreamingMarkdownView: View {
         let document = MarkdownParser.parse(content)
         let nsAttributedString = document.attributedString(options: options)
         
-        // Convert NSAttributedString to AttributedString
+        // Convert NSAttributedString to AttributedString with proper attribute scopes
+        #if canImport(UIKit)
+        do {
+            attributedString = try AttributedString(nsAttributedString, including: \.uiKit)
+        } catch {
+            // Try foundation scope as fallback
+            do {
+                attributedString = try AttributedString(nsAttributedString, including: \.foundation)
+            } catch {
+                // Last resort: plain text from parsed document
+                attributedString = AttributedString(nsAttributedString.string)
+            }
+        }
+        #elseif canImport(AppKit)
+        do {
+            attributedString = try AttributedString(nsAttributedString, including: \.appKit)
+        } catch {
+            // Try foundation scope as fallback
+            do {
+                attributedString = try AttributedString(nsAttributedString, including: \.foundation)
+            } catch {
+                // Last resort: plain text from parsed document
+                attributedString = AttributedString(nsAttributedString.string)
+            }
+        }
+        #else
+        // For other platforms, use foundation scope
         do {
             attributedString = try AttributedString(nsAttributedString, including: \.foundation)
         } catch {
-            // Fallback to plain text
-            attributedString = AttributedString(content)
+            // Last resort: plain text from parsed document
+            attributedString = AttributedString(nsAttributedString.string)
         }
+        #endif
     }
 }
 

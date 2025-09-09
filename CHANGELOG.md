@@ -17,13 +17,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Performance benchmarks
 - Cross-platform compatibility tests
 
+### Enhanced (Based on xamrock-client feedback)
+- **Typography Control**: Added `lineHeightMultiple` and `paragraphSpacingBefore` to `MarkdownRenderingOptions`
+- **Header Customization**: Added `headerFontWeights` and `headerFontScales` arrays for per-level header styling
+- **List Formatting**: Added `listItemSpacing` and `nestedListIndentation` for better list control
+- **Code Block Styling**: Added `codeBlockPadding`, `codeBlockBorderRadius`, and `codeBlockBorderColor`
+- **Blockquote Styling**: Added `blockquoteLeftBorderWidth`, `blockquoteLeftBorderColor`, `blockquoteBackgroundColor`, and `blockquotePadding`
+- **Link Styling**: Added `linkUnderlineStyle` and `linkFontWeight` options
+- **Enhanced Themes**: Updated GitHub, Documentation, and Chat themes with better defaults
+- **Emoji Support**: Verified full Unicode emoji support in parsing and rendering
+
 ### Changed
 - Improved inline parsing performance
 - Enhanced error messages for better debugging
+- Better default values for `paragraphSpacing` (14.0), `listIndentation` (28.0), and `lineSpacing` (3.0)
 
 ### Fixed
 - Tab handling in nested lists
 - Entity reference parsing in edge cases
+- Emoji rendering (already working, tests added for verification)
 
 ## [1.0.0] - 2024-08-30
 

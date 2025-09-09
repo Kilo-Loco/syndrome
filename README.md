@@ -7,14 +7,35 @@
 
 A high-performance, pure Swift Markdown parser with CommonMark compatibility and useful extensions.
 
-## 🎉 What's New in v2.0
+## 🎉 What's New in v2.1
 
+### Enhanced Typography & Styling (xamrock-client improvements)
+- **Advanced Typography Control**: 
+  - `lineHeightMultiple` for precise line height control
+  - `paragraphSpacingBefore` for paragraph spacing customization
+- **Header Customization**: 
+  - `headerFontWeights` array for per-level font weights (H1-H6)
+  - `headerFontScales` array for custom header size multipliers
+- **List Formatting**: 
+  - `listItemSpacing` for controlling space between list items
+  - `nestedListIndentation` for nested list indentation control
+- **Code Block Styling**: 
+  - `codeBlockPadding` for internal padding
+  - `codeBlockBorderRadius` and `codeBlockBorderColor` for visual polish
+- **Blockquote Enhancements**: 
+  - `blockquoteLeftBorderWidth` and `blockquoteLeftBorderColor`
+  - `blockquoteBackgroundColor` and `blockquotePadding`
+- **Link Styling**: 
+  - `linkUnderlineStyle` (including option to remove underlines)
+  - `linkFontWeight` for custom link emphasis
+
+### v2.0 Features
 - **Native SwiftUI Support**: New `MarkdownView` and `StreamingMarkdownView` components
 - **Text Extension**: Use `Text(markdown:)` for inline markdown rendering
-- **Pre-built Themes**: GitHub, Documentation, and Chat themes included
-- **Improved Spacing**: Better default paragraph and line spacing
+- **Pre-built Themes**: GitHub, Documentation, and Chat themes with enhanced defaults
+- **Improved Spacing**: Better default paragraph and line spacing values
+- **Full Emoji Support**: Complete Unicode emoji rendering (🎉 📊 💻 ✅)
 - **Streaming Optimization**: Efficient handling of real-time text updates
-- **SwiftUI Integration Guide**: Complete documentation for SwiftUI developers
 
 See the [SwiftUI Integration Guide](Documentation/SwiftUIIntegration.md) for details.
 
@@ -283,17 +304,46 @@ for block in document.blocks {
 import syndrome
 
 // Simple rendering with default options
-let markdown = "# Title\n\nThis is **bold** and *italic* text."
+let markdown = "# Title\n\nThis is **bold** and *italic* text with emoji 🎉"
 let attributedString = markdown.markdownAttributedString()
 
-// Rendering with custom options
-var options = MarkdownRenderingOptions.default
-options.baseFont = .systemFont(ofSize: 16)
-options.textColor = .label
-options.linkColor = .systemBlue
-options.paragraphSpacing = 12.0
+// Rendering with pre-built themes
+let githubStyled = document.attributedString(options: .github)
+let docStyled = document.attributedString(options: .documentation)
+let chatStyled = document.attributedString(options: .chat)
 
-let document = MarkdownParser.parse(markdown)
+// Advanced customization with new v2.1 features
+var options = MarkdownRenderingOptions(
+    baseFont: .systemFont(ofSize: 16),
+    textColor: .label,
+    linkColor: .systemBlue,
+    codeColor: .label,
+    codeBackgroundColor: .secondarySystemBackground,
+    codeBlockBackgroundColor: .tertiarySystemBackground,
+    blockquoteColor: .secondaryLabel,
+    // Typography control
+    lineHeightMultiple: 1.4,
+    paragraphSpacing: 16.0,
+    paragraphSpacingBefore: 8.0,
+    // Custom header styling
+    headerFontWeights: [.heavy, .bold, .semibold, .medium, .regular, .light],
+    headerFontScales: [2.5, 2.0, 1.5, 1.3, 1.1, 1.0],
+    // List formatting
+    listItemSpacing: 6.0,
+    nestedListIndentation: 32.0,
+    // Code block styling
+    codeBlockPadding: 12.0,
+    codeBlockBorderRadius: 8.0,
+    // Blockquote styling
+    blockquoteLeftBorderWidth: 4.0,
+    blockquoteLeftBorderColor: .systemBlue,
+    blockquoteBackgroundColor: .quaternarySystemFill,
+    blockquotePadding: 12.0,
+    // Link styling
+    linkUnderlineStyle: nil,  // No underline
+    linkFontWeight: .medium
+)
+
 let customAttributed = document.attributedString(options: options)
 
 // Use in UI components
